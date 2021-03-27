@@ -7,7 +7,7 @@
 ## 深度图与比例因子（scale_factor）
 深度图对应的尺度因子是深度图中存储的值与真实深度（单位为m）的比例
 ```
-depth_map_value / real depth = scale_factor
+depth_map_value / real_depth = scale_factor
 ```
 通常情况下，深度值以毫米为单位存储在**16位无符号整数(0~65535)**中，因此要获得以米为单位的z值，深度图的像素需要除以比例因子1000。不过不同相机的的比例因子可能不同，比如TUM数据集的比例因子为5000，即深度图中存储的深度值的单位为200毫米
 
@@ -18,10 +18,12 @@ depth_map_value / real depth = scale_factor
 dataset目录下存放了Hololens以及TUM的数据集，对应的目录下分别存放有:
 ```
  images: XXXXXX.png (RGB, 24-bit, PNG)
- depth_files: XXXXXX.png (16-bit, PNG)
- pose.txt (camera-to-world, 4×4 matrix in homogeneous coordinates)
+ depthmaps: XXXXXX.png (16-bit, PNG)
+ point_clouds: XXX.ply (ply格式的点云)
+ pose.txt: camera-to-world, 4×4 matrix in homogeneous coordinates
+ K.txt: camera intrinsics(3×3 matrix)
 ```
-如果没有pose.txt，那么在depth2Cloud.py中将view_ply_in_world_coordinate置为False,这时得到的点云的坐标是在前帧下的坐标
+如果没有pose.txt，那么在depth2Cloud.py中将view_ply_in_world_coordinate置为False，这时得到的点云的坐标是在前帧下的坐标
 ### 投影的逆过程
 
 ```python
@@ -90,7 +92,6 @@ def write_point_cloud(ply_filename, points):
 ![Hololens_ply](images/Hololens_ply.png)
 ### TUM
 ![TUM_ply](images/TUM_ply.png)
-
 
 ## 参考
 [From depth map to point cloud](https://medium.com/yodayoda/from-depth-map-to-point-cloud-7473721d3f)
